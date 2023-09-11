@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.StaticFiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ builder.Services.AddControllers(opt =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<FileExtensionContentTypeProvider>(); // for using content file! on file controller 
 
 var app = builder.Build();
 
@@ -49,7 +52,7 @@ app.UseAuthorization();
 //app.UseEndpoints(endpoints =>
 //{
 
-//    endpoints.MapControllers(); // empty means we have to set routes on actions!
+//    endpoints.MapControllers(); // empty means we have to set routes on actions! without specific routes
 //});
 
 app.MapControllers(); // route management
