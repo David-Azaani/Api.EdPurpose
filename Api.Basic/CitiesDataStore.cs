@@ -17,51 +17,51 @@ namespace Api.Basic
                      Id = 1,
                      Name = "City 1",
                      Description = "The one with that big park.",
-                     //PointsOfInterest = new List<PointOfInterestDto>()
-                     //{
-                     //    new PointOfInterestDto() {
-                     //        Id = 1,
-                     //        Name = "Central Park",
-                     //        Description = "The most visited urban park in the United States." },
-                     //     new PointOfInterestDto() {
-                     //        Id = 2,
-                     //        Name = "Empire State Building",
-                     //        Description = "A 102-story skyscraper located in Midtown Manhattan." },
-                     //}
+                     PoiCollection = new List<PoiDto>()
+                     {
+                         new PoiDto() {
+                             Id = 1,
+                             Name = "Central Park",
+                             Description = "The most visited urban park in the United States." },
+                          new PoiDto() {
+                             Id = 2,
+                             Name = "Empire State Building",
+                             Description = "A 102-story skyscraper located in Midtown Manhattan." },
+                     }
                 },
                 new CityDto()
                 {
                     Id = 2,
                     Name = "City 2",
                     Description = "The one with the cathedral that was never really finished.",
-                    //PointsOfInterest = new List<PointOfInterestDto>()
-                    // {
-                    //     new PointOfInterestDto() {
-                    //         Id = 3,
-                    //         Name = "Cathedral of Our Lady",
-                    //         Description = "A Gothic style cathedral, conceived by architects Jan and Pieter Appelmans." },
-                    //      new PointOfInterestDto() {
-                    //         Id = 4,
-                    //         Name = "Antwerp Central Station",
-                    //         Description = "The the finest example of railway architecture in Belgium." },
-                    // }
+                    PoiCollection = new List<PoiDto>()
+                     {
+                         new PoiDto() {
+                             Id = 3,
+                             Name = "Cathedral of Our Lady",
+                             Description = "A Gothic style cathedral, conceived by architects Jan and Pieter Appelmans." },
+                          new PoiDto() {
+                             Id = 4,
+                             Name = "Antwerp Central Station",
+                             Description = "The the finest example of railway architecture in Belgium." },
+                     }
                 },
                 new CityDto()
                 {
                     Id= 3,
                     Name = "City 3",
                     Description = "The one with that big tower.",
-                    //PointsOfInterest = new List<PointOfInterestDto>()
-                    // {
-                    //     new PointOfInterestDto() {
-                    //         Id = 5,
-                    //         Name = "Eiffel Tower",
-                    //         Description = "A wrought iron lattice tower on the Champ de Mars, named after engineer Gustave Eiffel." },
-                    //      new PointOfInterestDto() {
-                    //         Id = 6,
-                    //         Name = "The Louvre",
-                    //         Description = "The world's largest museum." },
-                    // }
+                    PoiCollection = new List<PoiDto>()
+                     {
+                         new PoiDto() {
+                             Id = 5,
+                             Name = "Eiffel Tower",
+                             Description = "A wrought iron lattice tower on the Champ de Mars, named after engineer Gustave Eiffel." },
+                          new PoiDto() {
+                             Id = 6,
+                             Name = "The Louvre",
+                             Description = "The world's largest museum." },
+                     }
                 }
             };
 

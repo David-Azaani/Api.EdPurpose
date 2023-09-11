@@ -1,9 +1,21 @@
+using Microsoft.AspNetCore.Mvc.Formatters;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//builder.Services.AddControllers();  // default for getting json response
+builder.Services.AddControllers(opt =>
+{
+
+    // opt.InputFormatters  or //  opt.OutputFormatters here is the place for config these 
+
+    opt.ReturnHttpNotAcceptable = true; // return 406 status code not acceptable response
+    // before this if had wanted xml we would have specific response and we would've  got json!
+    // with this we accept just specific response otherwise we sent 406 response!
+
+}).AddXmlDataContractSerializerFormatters();// config for getting xml response! and some useful configs!
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -12,7 +24,11 @@ var app = builder.Build();
 
 //Ordering doesn't matter!
 
-// Configure the HTTP request pipeline.
+
+
+
+
+//Configure the HTTP request pipeline.
 //Ordering Matters!
 //request pipeline
 

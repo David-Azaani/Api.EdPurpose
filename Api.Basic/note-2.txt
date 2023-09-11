@@ -1,0 +1,24 @@
+﻿
+
+Content Negotiation 
+
+The process of selecting the best representation for 
+a given response when there are multiple representations available 
+
+
+The media type(s) is/are passed through via the Accept header of the request
+																		- application/json
+																		- application/xml 
+
+
+						Output formatter Deals with output Media type: Accept header 
+						Input formatter Deals with input Media type: Content-Type header 
+
+
+						Support is implemented by ObjectResult Action result methods derive from it 
+
+
+
+on postman : accept : application/json
+                      */*
+					  application/xml (for this we have to confige for getting this type of answer!)
