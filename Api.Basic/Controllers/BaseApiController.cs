@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Basic.Controllers;
 
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] // must be at control level
     [ApiController]
     public class BaseApiController : ControllerBase
     {
@@ -15,3 +15,4 @@ namespace Api.Basic.Controllers;
         }
     }
 
+// ControllerBase : give us a lot of returning status code and helper methods! click to view source

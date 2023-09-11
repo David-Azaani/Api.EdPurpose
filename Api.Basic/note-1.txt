@@ -1,0 +1,25 @@
+﻿
+
+Common mistakes: - Don't send back a 200 Ok when something's wrong 
+Don't send back a 500 Internal Server Error when the client makes a mistake 
+
+importatnt  status Code :
+Level 100 : informational
+
+Level 200 : Success
+            200 - ok
+            201 - Created
+            204 - No Content (ex : delete operation)
+
+Level 300 : Redirection
+
+Level 400 : Client mistake
+            400 - Bad request
+            401 - Unauthorized
+            403 - Forbidden
+            404 - NotFound
+            409 - Conflict (ex : on updating 2 objects!)
+
+Level 500 : Server mistake
+            500 - Internal server error
+

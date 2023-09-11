@@ -18,15 +18,26 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    //swagger middleware
     app.UseSwagger();
+    // swagger doc
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
+//app.UseRouting();
+
 app.UseAuthorization();
 
-app.MapControllers();
+//app.UseEndpoints(endpoints =>
+//{
+
+//    endpoints.MapControllers(); // empty means we have to set routes on actions!
+//});
+
+app.MapControllers(); // route management
+
 
 
 //app.Run(async (context) =>
