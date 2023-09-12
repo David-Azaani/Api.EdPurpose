@@ -11,7 +11,7 @@ builder.Services.AddControllers(opt =>
 
     // opt.InputFormatters  or //  opt.OutputFormatters here is the place for config these 
 
-    opt.ReturnHttpNotAcceptable = true; // return 406 status code not acceptable response
+    //opt.ReturnHttpNotAcceptable = true; // return 406 status code not acceptable response
     // before this if had wanted xml we would have specific response and we would've  got json!
     // with this we accept just specific response otherwise we sent 406 response!
 

@@ -1,0 +1,19 @@
+﻿Data can be passed to an API by varic means 
+Binding source attributes tell the mo binding engine where to find the !Dim source 
+
+
+
+    [FromBody] - Request body 
+    [FromForm] - Form data in the request body 
+    [FromHeader] - Request header 
+    [FromQuery] - Query string parameters
+    [FromRoute] - Route data from the current request 
+    [FromService] - The service injected as action parameter 
+
+
+
+	[From Body] - Inferred for complex types 
+    [From Form] - Inferred for action parameters of type IFormFile and IFormFileCollection 
+	[FromRoute] - Inferred for any action parameter name matching a parameter in the route template 
+    [FromQuery] - Inferred for any other action parameters 
+
