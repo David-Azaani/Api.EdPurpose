@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Basic.Controllers;
 
 [Route("api/cities/{cityId}/[controller]")] // to access to che child with route!
-[ApiController]
+[ApiController] // check for validation automatically and 400 errors (ex :empty body)
 public class PoiController : ControllerBase
 {
     // [HttpGet("{cityId}")] because of using id on controller level we don't need to set cityId on http
@@ -43,6 +43,17 @@ public class PoiController : ControllerBase
     // ... address =>... Poi and not CreatePoi
     public ActionResult<PoiDto> CreatePoi(int cityId, PoiForCreationDto poiForCreationDto)
     {
+
+
+
+        //if (!ModelState.IsValid)
+        //{
+        //    return BadRequest(); not necessary because of api [ApiController] 
+        // so just write the anotation!
+        //}
+
+
+
         var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
         if (city == null) { return NotFound(); }
 
