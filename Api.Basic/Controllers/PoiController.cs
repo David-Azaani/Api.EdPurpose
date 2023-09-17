@@ -147,16 +147,32 @@ public class PoiController : ControllerBase
         if (!ModelState.IsValid) return BadRequest();
         // on this approach we should check validation manually!
 
-        if (!TryValidateModel(poiPatch))  return BadRequest(); //this is obligatory to check  after applying patchDocument! 
+        if (!TryValidateModel(poiPatch)) return BadRequest(); //this is obligatory to check  after applying patchDocument! 
 
         poi.Name = poiPatch.Name;
         poi.Description = poiPatch.Description;
         return NoContent();
 
-// review note-4 to see what's the response's body in this situation!
+        // review note-4 to see what's the response's body in this situation!
 
     }
 
+    [HttpDelete("{poiId}")] // full Update!
+    // address :...:port/api/cities/cityId/poi/poiId
+    public ActionResult DeletePoi(int cityId, int poiId)
+    {
+        var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        if (city == null) { return NotFound(); };
+
+        // find poi
+        var poi = city.PoiCollection.FirstOrDefault(a => a.Id == poiId);
+        if (poi == null) { return NotFound(); }
+
+        city.PoiCollection.Remove(poi);
+
+        return NoContent();
+
+    }
 
 }
 
