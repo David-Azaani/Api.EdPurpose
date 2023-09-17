@@ -1,7 +1,9 @@
 using Api.Basic;
+using Api.Basic.DbContexts;
 using Api.Basic.Services;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 #region SeriLog
 
@@ -68,7 +70,17 @@ builder.Services.AddTransient<IMailService, CloudMailService>();
 
 
 #region Note6
-builder.Services.AddSingleton<CitiesDataStore>(); 
+builder.Services.AddSingleton<CitiesDataStore>();
+
+#endregion
+
+
+#region Note8
+
+builder.Services.AddDbContext<CityInfoContext>(option =>
+        option.UseSqlite( builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"]));
+
+
 #endregion
 var app = builder.Build();
 

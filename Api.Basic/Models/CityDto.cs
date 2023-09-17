@@ -8,7 +8,7 @@ public class CityDto
    
     // dto(show to user) vs entity(save in db)
 
-    public int NumberOfPoi => PoiCollection.Count; // get !
+    public int NumberOfPoi => PoiCollection.Count; // get ! because we don't want to persist it on db!
 
     public ICollection<PoiDto> PoiCollection { get; set; } = new List<PoiDto>();
     // always set collection to empty one to avoid getting null reference error!

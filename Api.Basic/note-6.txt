@@ -21,9 +21,9 @@ ctor(ILocalMailService , xxx)
                "Point of interest deleted.",
                $"Point of interest {poi.Name} with id {poi.Id} was deleted.");
 
-Transient services // are created each time requested : best for lightweight services
+Transient services // are created each time per requested : best for lightweight services and stateless services
 Scoe services // once per  requested 
-Singletone services // first time when  requested 
+Singletone services // first time when we requested 
 
 
 
