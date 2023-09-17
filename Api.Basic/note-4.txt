@@ -1,0 +1,26 @@
+﻿ the body of our request
+                                    [
+                                          {
+
+                                                        "path": "/name", our target
+                                                        "op": "replace", operation!
+                                                        "value": "patched!" our new val!
+                                         }
+                                    ]
+
+or
+
+                                    [
+                                          {
+
+                                                        "path": "/name", our target
+                                                        "op": "replace", operation!
+                                                        "value": "patched! 1" our new val!
+                                         },
+                                        {    
+
+                                                        "path": "/description", our target
+                                                        "op": "replace", operation!
+                                                        "value": "patched! 2" our new val!
+                                         }
+                                   ]

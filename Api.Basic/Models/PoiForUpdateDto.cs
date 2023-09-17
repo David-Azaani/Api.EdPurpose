@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Api.Basic.Models
-{
-    public class PoiForCreationDto
+namespace Api.Basic.Models;
+
+    public class PoiForUpdateDto
     {
         // as in creation we don't need to have id , we made a dto for creation!
         // use separated dto for create update and delete!
@@ -18,4 +18,4 @@ namespace Api.Basic.Models
 
         // this approach is not good for validation best is to use fluent validation!
     }
-}
+
