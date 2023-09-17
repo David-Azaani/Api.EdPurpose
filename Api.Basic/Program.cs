@@ -1,7 +1,34 @@
+using Api.Basic;
+using Api.Basic.Services;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
+using Serilog;
+#region SeriLog
 
+//Log.Logger = new LoggerConfiguration()
+//    .MinimumLevel.Debug()
+//    .WriteTo.Console()
+//    .WriteTo.File("logs/cityinfo.txt", rollingInterval: RollingInterval.Day)
+//    .CreateLogger(); 
+#endregion
+
+// before builder
 var builder = WebApplication.CreateBuilder(args);
+
+#region Serilog
+//builder.Host.UseSerilog(); 
+#endregion
+
+
+
+#region Loge
+// builder.Logging. access to log Config 
+//builder.Logging.ClearProviders(); // Clearing Log compeletely
+//builder.Logging.AddConsole(); // returning back! 
+#endregion
+
+
+
 
 // Add services to the container.
 
@@ -9,12 +36,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(opt =>
 {
 
+    #region Note
     // opt.InputFormatters  or //  opt.OutputFormatters here is the place for config these 
 
     //opt.ReturnHttpNotAcceptable = true; // return 406 status code not acceptable response
 
     // before this if we had wanted xml we would have specific response and we would've  got json!
-    // with this we accept just specific response otherwise we sent 406 response!
+    // with this we accept just specific response otherwise we sent 406 response! 
+    #endregion
 
 
 }).AddNewtonsoftJson() // for using patch!
@@ -25,9 +54,26 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>(); // for using content file! on file controller 
 
+#region MailService
+//builder.Services.AddTransient<IMailService, LocalMailService>();
+
+
+#if DEBUG
+builder.Services.AddTransient<IMailService, LocalMailService>(); //just this if we dont want the next!! ;-)
+                                                                 // dont forget to change debug to release mode!
+#else
+builder.Services.AddTransient<IMailService, CloudMailService>();
+#endif
+#endregion
+
+
+#region Note6
+builder.Services.AddSingleton<CitiesDataStore>(); 
+#endregion
 var app = builder.Build();
 
 
+#region Note
 //Ordering doesn't matter!
 
 
@@ -38,6 +84,7 @@ var app = builder.Build();
 //Ordering Matters!
 //request pipeline
 
+#endregion
 if (app.Environment.IsDevelopment())
 {
     //swagger middleware
@@ -52,16 +99,19 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+#region Note
 //app.UseEndpoints(endpoints =>
 //{
 
 //    endpoints.MapControllers(); // empty means we have to set routes on actions! without specific routes
-//});
+//}); 
+#endregion
 
 app.MapControllers(); // route management
 
 
 
+#region Note
 //app.Run(async (context) =>
 //{
 
@@ -70,6 +120,7 @@ app.MapControllers(); // route management
 //});
 
 
+#endregion
 
 
 

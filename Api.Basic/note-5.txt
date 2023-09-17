@@ -1,0 +1,23 @@
+﻿ refere to microsoft doc for third party logger!
+ // Seri log
+ 1 - add package Serilog.AspNetCore
+ 2 - Serilog.Sinks. where we want to save
+	Serilog.Sinks.Console
+	Serilog.Sinks.File
+
+
+3 - Go to Program file and :
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/cityinfo.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+    // before builder
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
+// dont need to use builder.Logging.ClearProviders(); because we replaced the logger!
+
+
+it will integrate and dont need to change any cod in controller or other places!

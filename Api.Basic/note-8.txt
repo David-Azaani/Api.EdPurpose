@@ -1,0 +1,6 @@
+﻿namespace Api.Basic
+{
+    public class note
+    {
+    }
+}

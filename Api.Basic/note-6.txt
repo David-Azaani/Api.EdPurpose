@@ -1,0 +1,43 @@
+﻿How make and use service!
+Interface , implement , dependency, useing!
+
+
+program :
+
+// builder.Services.AddTransient<LocalMailService>(); // with out interface : not recomended
+ctor(LocalMailService , xxx)
+
+#if DEBUG
+builder.Services.AddTransient<IMailService, LocalMailService>(); //just this if we dont want the next!! ;-)
+#else 
+builder.Services.AddTransient<IMailService, CloudMailService>();
+#endif
+
+
+in conroller 
+
+ctor(ILocalMailService , xxx)
+ _localMailService.Send(
+               "Point of interest deleted.",
+               $"Point of interest {poi.Name} with id {poi.Id} was deleted.");
+
+Transient services // are created each time requested : best for lightweight services
+Scoe services // once per  requested 
+Singletone services // first time when  requested 
+
+
+
+in fact with Local... without interface we have a concrete classe without being able to change !
+but with having interface we have being able to change!
+
+
+So now we cn change our static db to singleton
+
+regisre it in program
+inject in controller
+and use!
+
+
+for using static class just 
+commend this builder.Services.AddSingleton<CitiesDataStore>(); 
+and remove injection from all controllers and change source of data in each action!

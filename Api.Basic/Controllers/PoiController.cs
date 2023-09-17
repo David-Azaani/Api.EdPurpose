@@ -1,5 +1,6 @@
 ﻿
 using Api.Basic.Models;
+using Api.Basic.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,15 +9,44 @@ namespace Api.Basic.Controllers;
 [Route("api/cities/{cityId}/[controller]")] // to access to che child with route!
 [ApiController] // check for validation automatically and 400 errors (ex :empty body)
 public class PoiController : ControllerBase
+
 {
+    private readonly ILogger<PoiController> _logger;
+    private readonly IMailService _localMailService;
+    private readonly CitiesDataStore _citiesDataStore;
+
+
+    public PoiController(ILogger<PoiController> logger 
+        ,IMailService mailService,
+        CitiesDataStore  citiesDataStore)
+    {
+        
+        _logger = logger ??
+                  throw new ArgumentNullException(nameof(logger));
+        _localMailService = mailService ??
+            throw new ArgumentNullException(nameof(mailService)); // for mail service
+        _citiesDataStore = citiesDataStore ?? throw new ArgumentNullException(nameof(citiesDataStore));
+
+
+        //HttpContext.RequestServices.GetService()  for getting service without injection
+    }
+
+    
+    
+
+
+
     // [HttpGet("{cityId}")] because of using id on controller level we don't need to set cityId on http
     [HttpGet]
     public ActionResult<IEnumerable<PoiDto>> GetPois(int cityId)
     {
 
-        var cities = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        //var cities = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        var cities = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (cities == null)
         {
+            _logger.LogInformation(
+                     $"City with id {cityId} wasn't found when accessing points of interest.");
             return NotFound();
         }
 
@@ -28,7 +58,8 @@ public class PoiController : ControllerBase
     [HttpGet("{poiId}", Name = "GetPoi")]
     public ActionResult<PoiDto> GetPoi(int cityId, int poiId)
     {
-        var cities = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+     //   var cities = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        var cities = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (cities == null) { return NotFound(); }
 
         var city = cities.PoiCollection.FirstOrDefault(a => a.Id == poiId);
@@ -57,10 +88,13 @@ public class PoiController : ControllerBase
 
         // this approach is not good for validation best is to use fluent validation!
 
-        var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+      //  var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        var city = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (city == null) { return NotFound(); }
 
-        var maxPoiId = CitiesDataStore.Current.Cities
+        //var maxPoiId = CitiesDataStore.Current.Cities
+        //    .SelectMany(a => a.PoiCollection).Max(p => p.Id);
+        var maxPoiId = _citiesDataStore.Cities
             .SelectMany(a => a.PoiCollection).Max(p => p.Id);
 
         var finalPoi = new PoiDto()
@@ -95,7 +129,8 @@ public class PoiController : ControllerBase
     {
 
 
-        var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        //var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        var city = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (city == null) { return NotFound(); };
 
         // find poi
@@ -129,7 +164,8 @@ public class PoiController : ControllerBase
     public ActionResult PartiallyUpdatePoi(int cityId, int poiId,
         JsonPatchDocument<PoiForUpdateDto> poiPatchDocument)
     {
-        var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+     //   var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        var city = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (city == null) { return NotFound(); };
 
         // find poi
@@ -161,7 +197,8 @@ public class PoiController : ControllerBase
     // address :...:port/api/cities/cityId/poi/poiId
     public ActionResult DeletePoi(int cityId, int poiId)
     {
-        var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        //var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        var city = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (city == null) { return NotFound(); };
 
         // find poi
@@ -170,9 +207,45 @@ public class PoiController : ControllerBase
 
         city.PoiCollection.Remove(poi);
 
+
+        _localMailService.Send(
+               "Point of interest deleted.",
+               $"Point of interest {poi.Name} with id {poi.Id} was deleted.");
+
+
         return NoContent();
 
     }
+
+
+
+    //[HttpGet]
+    //public ActionResult<IEnumerable<PoiDto>> GetPois(int cityId)
+    //{
+
+    //    try
+    //    {
+    //        throw new Exception("Exception sample");
+    //        var cities = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+    //        if (cities == null)
+    //        {
+    //            _logger.LogInformation(
+    //                $"City with id {cityId} wasn't found when accessing points of interest.");
+    //            return NotFound();
+    //        }
+
+    //        return Ok(cities.PoiCollection);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //       _logger.LogCritical($"Exception blah blah blah with id {cityId}",ex);
+    //       return StatusCode(500, "Blah Blah Blah...");
+    //    }
+
+    //    //be careful : never write the stack trace on production mode!!!!!!!!!!!!! just dveelopment
+    //}
+
+
 
 }
 

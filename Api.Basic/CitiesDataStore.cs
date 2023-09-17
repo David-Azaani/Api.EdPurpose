@@ -5,7 +5,9 @@ namespace Api.Basic
     public class CitiesDataStore
     {
         public List<CityDto> Cities { get; set; }
-       public static CitiesDataStore Current { get; } = new CitiesDataStore();
+       //public static CitiesDataStore Current { get; } = new CitiesDataStore();
+       // if you want to comment this out you have to use static instance instead of injection on all controller
+        // and comment registering this on program cs
 
         public CitiesDataStore()
         {

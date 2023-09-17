@@ -1,0 +1,6 @@
+﻿when we dont have  appsetting.Production
+all settings are for all envoronment
+but when we define appsetting.Production all setting would be prformed on all environment e3xcept Production
+becxause production has it's own settings
+
+for chnage and swithc= > proj propertieis => debu tab=> and down of the window!
