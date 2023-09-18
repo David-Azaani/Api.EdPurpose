@@ -1,11 +1,12 @@
 ﻿
 using Api.Basic.Models;
 using Api.Basic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Basic.Controllers;
-
+[Authorize]
 [Route("api/cities/{cityId}/[controller]")] // to access to che child with route!
 [ApiController] // check for validation automatically and 400 errors (ex :empty body)
 public class PoiController : ControllerBase
@@ -16,11 +17,11 @@ public class PoiController : ControllerBase
     private readonly CitiesDataStore _citiesDataStore;
 
 
-    public PoiController(ILogger<PoiController> logger 
-        ,IMailService mailService,
-        CitiesDataStore  citiesDataStore)
+    public PoiController(ILogger<PoiController> logger
+        , IMailService mailService,
+        CitiesDataStore citiesDataStore)
     {
-        
+
         _logger = logger ??
                   throw new ArgumentNullException(nameof(logger));
         _localMailService = mailService ??
@@ -31,8 +32,8 @@ public class PoiController : ControllerBase
         //HttpContext.RequestServices.GetService()  for getting service without injection
     }
 
-    
-    
+
+
 
 
 
@@ -41,6 +42,8 @@ public class PoiController : ControllerBase
     public ActionResult<IEnumerable<PoiDto>> GetPois(int cityId)
     {
 
+
+       
         //var cities = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
         var cities = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (cities == null)
@@ -58,7 +61,7 @@ public class PoiController : ControllerBase
     [HttpGet("{poiId}", Name = "GetPoi")]
     public ActionResult<PoiDto> GetPoi(int cityId, int poiId)
     {
-     //   var cities = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        //   var cities = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
         var cities = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (cities == null) { return NotFound(); }
 
@@ -88,7 +91,7 @@ public class PoiController : ControllerBase
 
         // this approach is not good for validation best is to use fluent validation!
 
-      //  var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        //  var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
         var city = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (city == null) { return NotFound(); }
 
@@ -164,7 +167,7 @@ public class PoiController : ControllerBase
     public ActionResult PartiallyUpdatePoi(int cityId, int poiId,
         JsonPatchDocument<PoiForUpdateDto> poiPatchDocument)
     {
-     //   var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
+        //   var city = CitiesDataStore.Current.Cities.FirstOrDefault(a => a.Id == cityId);
         var city = _citiesDataStore.Cities.FirstOrDefault(a => a.Id == cityId);
         if (city == null) { return NotFound(); };
 

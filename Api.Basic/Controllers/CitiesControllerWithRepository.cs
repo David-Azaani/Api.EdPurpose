@@ -22,6 +22,11 @@ public class CitiesControllerWithRepository : BaseApiController
    [HttpGet]
     public async Task<ActionResult<IEnumerable<CityWithoutPoiDto>>> GetCities()
     {
+
+
+
+        
+
         var cityEntity = await _cityInfoRepository.GetCitiesAsync();
 
 

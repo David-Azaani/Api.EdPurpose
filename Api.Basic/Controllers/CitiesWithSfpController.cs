@@ -3,15 +3,17 @@ using System.Text.Json;
 using Api.Basic.Models;
 using Api.Basic.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace Api.Basic.Controllers;
 
-
+ [Authorize]
 public class CitiesWithSfpController : BaseApiController
 {
     private readonly IMapper _mapper;
     private readonly ICityInfoRepository _cityInfoRepository;
      const int maxCitiesPageSize = 20;
+   
 
     public CitiesWithSfpController(ILogger<BaseApiController> logger, IMapper mapper
         , ICityInfoRepository cityInfoRepository) : base(logger)

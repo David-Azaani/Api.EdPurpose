@@ -1,0 +1,126 @@
+﻿Securing Api
+
+
+Token-based security 
+            - Send a token on each request
+            - A token represents consent
+            - Validate the token at level of the API 
+                                    Approach works for almost all moderr application types 
+
+                                    --------------------------
+
+Implementinc Token-based Security  :
+* API "login" endpoint accepting a username/password 
+* Ensure the API can only be accessed with a valid token 
+* Pass the token from the client to the API as a Bearer token on each request Authorization: Bearer mytoken123 
+
+
+
+
+eyJhbaiODIUzI1NiIsInR5cCI6IkpXVC79.eyJzdWIi0iIxMjMONTY30DkwIiwibmFtZ5I6IkpvaG4gRG91IiwiaWFOIjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36P0k6N,JV_adQssw5c 
+
+
+
+{   
+    
+    "sub": "1234567890",
+    "name": "John Doe",
+    "iat": 1516239022 
+} 
+.
+#1 : Payload E.g.: some JSON that contains generic token info, 
+like when the token was created, and some info about the user 
+eyJzdWIi0iIxMjMONTY30DkwIiwibmFtZ5I6IkpvaG4gRG91IiwiaWFOIjoxNTE2MjM5MDIyfQ
+.
+#2 Signature A hash of the payload, used to ensure the data wasn't tampered with : needs Key!
+SflKxwRJSMeKKF2QT4fwpMeJf36P0k6N,JV_adQssw5c
+.
+#3 Header
+eyJhbaiODIUzI1NiIsInR5cCI6IkpXVC79
+{ 
+        "alg": "HS256",
+        "typ": "NT" 
+} 
+Header :
+Essential token information like the key algorithm used for signing 
+
+
+How Create JSOn webToken
+
+nuget :
+  Microsoft.IdentityModel.Tokens;
+  System.IdentityModel.Tokens.Jwt
+
+
+
+
+to add ability to our app to get token as authentication system : 
+
+Microsoft.AspNetCore.Authentication.JwtBearer
+
+Program cs :
+
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Authentication:Issuer"],
+                ValidAudience = builder.Configuration["Authentication:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.ASCII.GetBytes(builder.Configuration["Authentication:SecretForKey"]))
+            };
+        }
+    );
+
+
+
+
+    ----
+        see > PoiControllerWithRepository
+
+	//var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value;
+
+            //if (!await _cityInfoRepository.CityNameMatchesCityId(cityName, cityId))
+            //{
+            //    return Forbid();
+            //}
+
+
+
+
+////////////// Using policy
+        
+
+
+
+		builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("MustIran", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("city", "Antwerp");
+    });
+});
+
+
+
+
+
+
+
+
+
+
+//TODO :
+OAuth2 
+OAuth2 is an open protocol to allow secure authorization in a simple and standard method from web,
+mobile and desktop applications 
+
+OpenID Connect 
+OpeniD Connect is a simple identity layer on top of the OAuth2 protocol 
+

@@ -3,10 +3,12 @@ using Api.Basic.Entities;
 using Api.Basic.Models;
 using Api.Basic.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Basic.Controllers;
+[Authorize(Policy = "MustIran")]
 
 [Route("api/cities/{cityId}/[controller]")] // to access to che child with route!
 [ApiController] // check for validation automatically and 400 errors (ex :empty body)
@@ -45,6 +47,15 @@ public class PoiControllerWithRepository : ControllerBase
     {
 
 
+
+        //var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value;
+
+        //if (!await _cityInfoRepository.CityNameMatchesCityId(cityName, cityId))
+        //{
+        //    return Forbid();
+        //}
+
+        
         if (!await _cityInfoRepository.CityExistsAsync(cityId))
         {
             _logger.LogInformation(

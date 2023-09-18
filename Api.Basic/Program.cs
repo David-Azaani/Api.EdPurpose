@@ -1,9 +1,11 @@
+using System.Text;
 using Api.Basic;
 using Api.Basic.DbContexts;
 using Api.Basic.Services;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 #region SeriLog
 
@@ -78,7 +80,7 @@ builder.Services.AddSingleton<CitiesDataStore>();
 #region Note8
 
 builder.Services.AddDbContext<CityInfoContext>(option =>
-        option.UseSqlite( builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"]));
+        option.UseSqlite(builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"]));
 
 
 #endregion
@@ -94,7 +96,34 @@ builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 #endregion
+#region Note12
+builder.Services.AddAuthentication("Bearer")
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Authentication:Issuer"],
+        ValidAudience = builder.Configuration["Authentication:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.ASCII.GetBytes(builder.Configuration["Authentication:SecretForKey"]))
+    };
+}
+);
 
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("MustIran", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("city", "Antwerp");
+    });
+});
+#endregion
 
 var app = builder.Build();
 
@@ -123,7 +152,11 @@ app.UseHttpsRedirection();
 
 //app.UseRouting();
 
+#region Note12
+app.UseAuthentication(); //first
+
 app.UseAuthorization();
+#endregion
 
 #region Note
 //app.UseEndpoints(endpoints =>
