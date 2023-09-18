@@ -1,0 +1,83 @@
+﻿Fitering Paging Searching Sorting : by QueryString!
+
+* use thses .Trim().ToLower();
+to see what query will being made :
+How to suer the filter apply efectively on database leven and not after that?
+ Answ :  Using Log!
+   appsetting.Developer ==> and add
+                                  "Microsoft.EntityFrameworkCore.Database.Command": "Information"
+
+
+Result :
+        Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 7)], CommandType='Text', CommandTimeout='30']
+      SELECT "c"."Id", "c"."Description", "c"."Name"
+      FROM "Cities" AS "c"
+      WHERE lower("c"."Name") = @__name_0
+      ORDER BY "c"."Name"
+
+      => means apply at database Level!
+
+      // sql injection is being checked by ef but if you use anything except ef you must check sql injection your self!!!
+
+
+      importatn thing is :  _context.Cities as IQueryable<City>;
+      . where : filter
+      . where contain serach
+      . order
+
+
+      .tolistAsync()
+
+      /////
+
+
+	  A query variable stores query commands, not results 
+      - IQueryable<T>: creates an expression tree
+      Execution is deferred until the query is iterated over 
+      - foreach loop
+      - ToList( ), ToArray( ), ToDictionary( ) 
+      - Singleton queries : .Count() . Average() .First()
+
+      ///////////
+
+      Paging : 
+              - Page Size SHould be Limited
+              - Page By default
+              - Using IQueryable
+
+
+
+
+
+
+      // Useful linke for Route :
+       https://stackoverflow.com/questions/54267137/actions-require-unique-method-path-combination-for-swagger
+Paging:
+int pageNumber=1,int pageSize=10  must have value but these can be change by user!
+so we define const max pageSize!
+const int maxCitiesPageSize = 20;
+beter for each source we have specific maxPage size instead of one for all resources!
+
+
+      collection.OrderBy(c => c.Name)
+                .Skip(pageSize * (pageNumber - 1)) //last thing
+                .Take(pageSize)                    //last thing
+                .ToListAsync();
+
+
+
+for paging we have to use pagingMetadata :
+       Pagination metadata often includes:
+                                 - Total amount of items
+                                 - Total amount of pages
+                                 - Current page number
+                                 - Page size 
+
+important key about paging MetaData : When requesting application/json, paging metadata isn't part of the resource
+representation Use a custom header, like X-Pagination 
+
+So create PaginationMetadata Class
+                             
+
+                                 

@@ -23,6 +23,7 @@ namespace Api.Basic.Services
             return await _context.Cities.AnyAsync(c => c.Id == cityId && c.Name == cityName);
         }
 
+        // tuple
         public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(
             string? name, string? searchQuery, int pageNumber, int pageSize)
         {
@@ -55,6 +56,41 @@ namespace Api.Basic.Services
             return (collectionToReturn, paginationMetadata);
         }
 
+        public async Task<IEnumerable<City>> GetCitiesAsyncFiletered(string? name)
+        {
+            if (string.IsNullOrEmpty(name)) return await GetCitiesAsync();
+
+
+            name = name.Trim().ToLower();
+
+            return await _context.Cities
+                .Where(c => c.Name.ToLower() == name)
+                .OrderBy(a => a.Name)
+                .ToListAsync();
+
+        }
+
+        public async Task<IEnumerable<City>> GetCitiesAsyncSearched(string? searchQuery)
+        {
+            if (string.IsNullOrEmpty(searchQuery)) return await GetCitiesAsync();
+
+
+            searchQuery = searchQuery.Trim().ToLower();
+
+
+            var collection = _context.Cities as IQueryable<City>;
+
+            return await collection.Where(a => a.Name.ToLower().Contains(searchQuery)
+                                               || (a.Description != null && a.Description.ToLower().Contains(searchQuery)))
+                .OrderBy(a => a.Name)
+                .ToListAsync();
+
+
+
+
+
+
+        }
 
 
         public async Task<City?> GetCityAsync(int cityId, bool includePoi)
@@ -64,7 +100,7 @@ namespace Api.Basic.Services
                 return await _context.Cities.Include(c => c.PoiCollection)
                     .Where(c => c.Id == cityId).FirstOrDefaultAsync();
 
-               
+
             }
 
             return await _context.Cities
@@ -77,7 +113,7 @@ namespace Api.Basic.Services
         }
 
         public async Task<Poi?> GetPoiForCityAsync(
-            int cityId, 
+            int cityId,
             int poi)
         {
             return await _context.Poi
@@ -92,7 +128,7 @@ namespace Api.Basic.Services
                            .Where(p => p.CityId == cityId).ToListAsync();
         }
 
-        public async Task AddPoiForCityAsync(int cityId, 
+        public async Task AddPoiForCityAsync(int cityId,
             Poi poi)
         {
             var city = await GetCityAsync(cityId, false);
