@@ -1,0 +1,21 @@
+﻿AutoMapper
+
+# Nuget : AutoMapper.Extensions.Microsoft.Dependenc
+# Program Cs : register Service
+# builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+# Create Profiles in Profile Folder
+  . Drrived form Profile
+  .Write your MApping on Ctor!
+  ..ReverseMap()
+# Inject Imapper to your Controller
+
+ var result _mapper.Map<destinationType>(Source);
+
+
+ note : for gettin the correct mapping we have to wirte the same name on both side of the entities,wheather entity / dto
+
+
+ iActionResul for any kind of result!
+
+
+

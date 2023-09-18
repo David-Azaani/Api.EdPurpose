@@ -1,0 +1,65 @@
+﻿repository PAttern :
+
+No repository pattern Code 
+      duplication More 
+      error-prone code 
+      Harder to test the consuming class 
+
+
+
+
+The Repository Pattern :
+An abstraction that reduces complexity and aims to make the code,
+safe for the repository implementation, persistence ignorant 
+
+
+
+Repository pattern
+      No duplication 
+      Less error-prone 
+      code Better testability of the consuming class 
+
+
+
+	  Persistence Ignorant 
+Switching out the persistence technology is not the main purpose. 
+Choosing the best one for each repository method is. 
+
+
+*
+//IQueryable => Ordered by(PAgination),
+// in Asyc method : Task ....Get...Async()
+// Reading from db is an IO operation
+
+
+The Purpose of Async Code 
+Freeing up threads so they can be used for other tasks,
+which improves the scalability of your application 
+
+Repository Pattern: 
+# Interface 
+# Implementing
+# registering in Program : for Repository Scope is the best!Likewise Db Context!Create one per request
+# inject in Ctor
+# Using !
+
+
+Singleton lifetime: which creates a single instance throughout the application.
+It creates the instance for the first time and reuses the same object in the all calls.
+Singleton objects are the same for every object and every request.
+
+Scoped lifetime : services are created once per request within the scope.
+It is equivalent to a singleton in the current scope. For example, 
+in MVC it creates one instance for each HTTP request, 
+but it uses the same instance in the other calls within the same web request.
+Scoped objects are the same within a request, but different across different requests.
+
+Transient lifetime :  services are created each time they are requested.
+This lifetime works best for lightweight, stateless services.
+Transient objects are always different; 
+a new instance is provided to every controller and every service.
+
+
+
+
+

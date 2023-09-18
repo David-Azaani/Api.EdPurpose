@@ -82,6 +82,20 @@ builder.Services.AddDbContext<CityInfoContext>(option =>
 
 
 #endregion
+
+
+
+
+#region Note9
+builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
+#endregion
+#region Note10
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+#endregion
+
+
 var app = builder.Build();
 
 

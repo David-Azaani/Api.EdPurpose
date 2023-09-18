@@ -98,3 +98,7 @@ or we can use another way on flower shop!
 * : __EFMigrationsHistory table : keep our migration History
 * : dont set connection string on appsetings.json
  1# : put in on Environment Variable :  then rest vs ,regardless of the other app setings you proj vs reads that !
+
+
+
+ Always Seprate Entity model from outer facing models (DTOS)
