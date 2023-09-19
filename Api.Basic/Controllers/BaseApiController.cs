@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Basic.Controllers;
 
-    [Route("api/[controller]")] // must be at control level
+    [Route("api/v{version:apiVersion}/[controller]")] // must be at control level
     [ApiController]
     public class BaseApiController : ControllerBase
     {

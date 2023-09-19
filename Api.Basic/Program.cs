@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Api.Basic;
 using Api.Basic.DbContexts;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 #region SeriLog
 
@@ -54,7 +56,35 @@ builder.Services.AddControllers(opt =>
     .AddXmlDataContractSerializerFormatters();// config for getting xml response! and some useful configs!
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+#region Note13
+builder.Services.AddSwaggerGen(setupAction =>
+{
+    var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"; //Api.Basic.xml
+    var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+
+    setupAction.IncludeXmlComments(xmlCommentsFullPath);
+    #region Documenting for Authentication
+
+    setupAction.AddSecurityDefinition("Api.BasicBearerAuth", new OpenApiSecurityScheme()
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        Description = "Input a valid token to access this API put This Way Bearer{ }Token"
+    });
+    #endregion
+
+    setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
+{
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Api.BasicBearerAuth" }
+            }, new List<string>() }
+});
+});
+#endregion
 
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>(); // for using content file! on file controller 
 
@@ -69,6 +99,12 @@ builder.Services.AddTransient<IMailService, LocalMailService>(); //just this if 
 builder.Services.AddTransient<IMailService, CloudMailService>();
 #endif
 #endregion
+builder.Services.AddApiVersioning(setupAction =>
+{
+    setupAction.AssumeDefaultVersionWhenUnspecified = true;
+    setupAction.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    setupAction.ReportApiVersions = true;
+});
 
 
 #region Note6
@@ -124,6 +160,19 @@ builder.Services.AddAuthorization(options =>
     });
 });
 #endregion
+
+
+
+#region Note13: ApiVersioning
+builder.Services.AddApiVersioning(setupAction =>
+{
+    setupAction.AssumeDefaultVersionWhenUnspecified = true;
+    setupAction.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    setupAction.ReportApiVersions = true;
+});
+
+#endregion
+
 
 var app = builder.Build();
 

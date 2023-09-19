@@ -48,5 +48,7 @@ public class FileController : ControllerBase
 
 
     }
+
+    // don't forget to see r click on pdf file on solution explorer!!!
 }
 

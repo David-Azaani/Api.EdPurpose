@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Api.Basic</name>
+    </assembly>
+    <members>
+        <member name="M:Api.Basic.Controllers.CitiesWithSfpController.GetCities(System.String)">
+            <summary>
+            GetCities
+            </summary>
+            <param name="name">the name of city</param>
+            <returns>An ActionResult</returns>
+        </member>
+        <member name="M:Api.Basic.Controllers.CitiesWithSfpController.GetCity(System.Int32,System.Boolean)">
+            <summary>
+            GetCity
+            </summary>
+            <param name="id">The id of the city</param>
+            <param name="includePoi"> whether or not to include the poi </param>
+            <returns>An ActionResult</returns>
+            <response code="200">Returns the requested city</response>
+            <response code="404">Not Found!</response>
+        </member>
+        <member name="T:Api.Basic.Migrations.initialDb">
+            <inheritdoc />
+        </member>
+        <member name="M:Api.Basic.Migrations.initialDb.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Api.Basic.Migrations.initialDb.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Api.Basic.Migrations.initialDb.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Api.Basic.Migrations.SeedData">
+            <inheritdoc />
+        </member>
+        <member name="M:Api.Basic.Migrations.SeedData.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Api.Basic.Migrations.SeedData.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Api.Basic.Migrations.SeedData.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Api.Basic.Models.CityWithoutPoiDto">
+            <summary>
+            A DTO for a city without points of interest
+            </summary>
+        </member>
+        <member name="P:Api.Basic.Models.CityWithoutPoiDto.Id">
+            <summary>
+            The id of the city
+            </summary>
+        </member>
+        <member name="P:Api.Basic.Models.CityWithoutPoiDto.Name">
+            <summary>
+            The name of the city
+            </summary>
+        </member>
+        <member name="P:Api.Basic.Models.CityWithoutPoiDto.Description">
+            <summary>
+            The description of the city
+            </summary>
+        </member>
+    </members>
+</doc>

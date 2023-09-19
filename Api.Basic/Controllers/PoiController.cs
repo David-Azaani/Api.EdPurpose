@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Basic.Controllers;
 [Authorize]
-[Route("api/cities/{cityId}/[controller]")] // to access to che child with route!
+[ApiVersion("2.0")]
+[Route("api/v{version:apiVersion}/cities/{cityId}/[controller]")] // to access to che child with route!
 [ApiController] // check for validation automatically and 400 errors (ex :empty body)
 public class PoiController : ControllerBase
 

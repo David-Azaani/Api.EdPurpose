@@ -1,0 +1,102 @@
+﻿Api Versioning.
+
+
+
+Version the URI
+                - https://root/api/v1/authors - https://root/api/v2/authors 
+Version the URI via query string parameter 
+                - https://root/api/authors?version=v1 
+Version via custom request header
+                - X-version: "v1" 
+Version via Accept header
+                - Accept: "application/json;version=v1"
+Version the media types
+                - Accept: "application/vnd.marvin.book.v1+json" 
+
+
+
+
+the most Common way :
+                NuGet package - https://www.nuget.org/packages/ Microsoft.AspNetCore.Mvc.Versioning/ 
+
+
+
+                Register it on Programs.cs
+
+                         builder.Services.AddApiVersioning(setupAction =>
+                        {
+                            setupAction.AssumeDefaultVersionWhenUnspecified = true;
+                            setupAction.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                            setupAction.ReportApiVersions = true;
+                        });
+
+
+
+                        then look at hearde : api-supported-versions: 1.0 
+                        to change that we use [ApiVersion("1.0")]
+                                              [ApiVersion("2.0")] 
+                                              or we can write both of them  : WeatherForecastController
+/v{version:apiVersion}/   => on route!
+
+
+
+
+
+
+
+Swagger
+
+on program : 
+                              builder.Services.AddSwaggerGen(setupAction =>
+                                {
+                                    var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                                    var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+
+                                    setupAction.IncludeXmlComments(xmlCommentsFullPath);
+
+                                    setupAction.AddSecurityDefinition("CityInfoApiBearerAuth", new OpenApiSecurityScheme()
+                                    {
+                                        Type = SecuritySchemeType.Http,
+                                        Scheme = "Bearer",
+                                        Description = "Input a valid token to access this API"
+                                    });
+
+                                    setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
+                                    {
+                                        {
+                                            new OpenApiSecurityScheme
+                                            {
+                                                Reference = new OpenApiReference {
+                                                    Type = ReferenceType.SecurityScheme,
+                                                    Id = "CityInfoApiBearerAuth" }
+                                            }, new List<string>() }
+                                    });
+                                });
+
+
+
+
+ Xml Comment on our Action :  see CitiesWithSfpController and   CityWithoutPoiDto
+ use /// to write xml document
+
+    /// <summary>
+    /// NameOf Action
+    /// </summary>
+    /// <param name="id">The id of the ...</param>
+    /// <param name="includePoi">whether or no to include the ....</param>
+    /// <returns>An Actionresult</returns>
+   /// <response code="200">Returns the requested city</response>
+   /// <response code="404">Returns the requested city</response>
+
+
+ then we have to generate xml document file : project properties =>output =>check Generate a file containing api documenting
+ an then on below box write for ex : Api.Basic.xpml
+ then we need to confgure swagger like thecode above!
+
+ notet: to show what kind of status cods could our action return : we use this : on our actions!
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+---------------------------------------------------------------------------------------
+
